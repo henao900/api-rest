@@ -21,3 +21,65 @@
     })
   })
 </script>
+
+<form id="login">
+  <input type="email" name="email" id="email" placeholder="Tu Email">
+  <br><br>
+<input type="password" name="password" id="password" placeholder="Tu Contraseña">
+  <br><br>
+<input type="submit" value="Login">
+</form>
+
+
+<script type="text/javascript">
+  function login(email, password) {
+var settings= {
+"async":false,
+"url":
+"/api/signin",
+"method":
+"POST",
+"headers": {
+"Content-Type":
+"application/x-www-form-urlencoded",
+},
+
+"data": {
+
+email: email,
+
+password: password
+
+}
+
+}
+
+$.ajax(settings).done(function (response) {
+
+console.log(response);
+
+localStorage.setItem('token', response.token)
+
+//redireccionar a otra página
+
+});
+
+}
+
+$('#login').on('submit',
+function (e) {
+
+var email
+= $("#email").val()
+
+var password
+= $("#password").val()
+
+login(email, password)
+
+return
+false
+
+})
+
+</script>

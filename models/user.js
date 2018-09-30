@@ -37,4 +37,11 @@ UserSchema.methods.gravatar = function () {
   return `https://gravatar.com/avatar/${md5}?s=200&d=retro`
 }
 
+UserSchema.methods.comparePassword= function (candidatePassword, cb)
+{
+  bcrypt.compare(candidatePassword, this.password, (err, isMatch)=>{
+    cb(err, isMatch)
+  })
+}
+
 module.exports = mongoose.model('User', UserSchema)

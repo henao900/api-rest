@@ -18,18 +18,54 @@ function signUp (req, res) {
 }
 
 function signIn (req, res) {
-  User.find({ email: req.body.email }, (err, user) => {
-    if (err) return res.status(500).send({ message: err })
-    if (!user) return res.status(404).send({ message: 'No existe el usuario' })
 
-    req.user = user
-    res.status(200).send({
-      message: 'Te has logueado correctamente',
-      token: service.createToken(user)
-    })
-  })
-}
-
+  User.findOne({ email: req.body.email }, (err, user)
+  => {
+  
+  if (err)
+  return res.status(500).send({ message:
+  
+  `Error al ingresar:
+  ${err}` })
+  
+  if (!user)
+  return res.status(404).send({ message:
+  
+  `No existe el usuario:
+  ${req.body.email}` })
+  
+  
+  return user.comparePassword(req.body.password,
+  
+  (err, isMatch) => {
+  
+  if (err)
+  return res.status(500).send(
+  
+  { message: `Error al ingresar:
+  ${err}` })
+  
+  if (!isMatch)
+  return res.status(404).send(
+  
+  { message: `Error de contraseña:
+  ${req.body.email}` })
+  
+  
+  req.user = user
+  
+  return res.status(200).send({ message:
+  
+  'Te has logueado correctamente',
+  
+  token: service.createToken(user) })
+  
+  }); 
+  
+  }).select('_id email password');
+  
+  }
+  
 module.exports = {
   signUp,
   signIn
